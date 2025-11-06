@@ -50,7 +50,7 @@ public class Trainer {
     private void addUser(UserEntity userEntity) {
         this.userEntity = userEntity;
         userEntity.addTrainer(this);
-        userEntity.addRole(Role.Trainer);
+        userEntity.addRole(Role.ROLE_TRAINER);
     }
 
 

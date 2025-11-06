@@ -1,7 +1,10 @@
 package hello.squadfit.security;
 
+import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.entity.UserEntity;
+import hello.squadfit.domain.member.repository.MemberRepository;
 import hello.squadfit.domain.member.repository.UserRepository;
+import hello.squadfit.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,6 +18,8 @@ import java.util.Optional;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -24,7 +29,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(userData.isEmpty()){
             return null;
         }
+        Member member = memberService.findOneByUserId(userData.get().getId());
 
-        return new CustomUserDetails(userData.get());
+        return new CustomUserDetails(userData.get(), member.getNickName());
     }
 }

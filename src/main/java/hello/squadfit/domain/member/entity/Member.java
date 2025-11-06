@@ -110,7 +110,7 @@ public class Member extends BaseEntity {
     public void addUser(UserEntity userEntity){
         this.userEntity = userEntity;
         userEntity.addMember(this);
-        userEntity.addRole(Role.Member);
+        userEntity.addRole(Role.ROLE_MEMBER);
     }
 
     // == 생성 메서드 == //

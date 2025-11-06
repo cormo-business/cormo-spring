@@ -9,10 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
 
     private final UserEntity userData;
+    private final String nickName;
+
+    public CustomUserDetails(UserEntity userData, String nickName) {
+        this.userData = userData;
+        this.nickName = nickName;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -44,6 +49,12 @@ public class CustomUserDetails implements UserDetails {
     public Role getRole(){
         return userData.getRole();
     }
+
+
+    public String getNickName(){
+        return this.nickName;
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {

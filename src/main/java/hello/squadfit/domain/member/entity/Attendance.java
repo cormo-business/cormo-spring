@@ -18,11 +18,11 @@ public class Attendance {
     private Long Id;
 
     @Column(nullable = false)
-    LocalDateTime attendanceTime;
+    private LocalDateTime attendanceTime;
 
     // == 연관관계 == //
     @ManyToOne(fetch = LAZY)
-    Member member;
+    private Member member;
 
     // == 연관관계 편의 메서드 == //
     public void addAttendance(Member member){

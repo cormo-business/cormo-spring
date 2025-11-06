@@ -25,7 +25,6 @@ import static hello.squadfit.security.jwt.JWTExpiredMs.accessExpiredMs;
 import static hello.squadfit.security.jwt.JWTExpiredMs.refreshExpiredMs;
 
 @Slf4j
-@RequiredArgsConstructor
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -33,6 +32,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     private final JWTTokenRepository jwtTokenRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    public LoginFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, JWTTokenRepository jwtTokenRepository) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.jwtTokenRepository = jwtTokenRepository;
+
+        setFilterProcessesUrl("/api/login");
+    }
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -56,6 +64,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String role = userDetails.getRole().toString();
         String username = userDetails.getUsername();
+        String nickName = userDetails.getNickName();
         Long userId = userDetails.getUserId();
 
         // 토큰 생성
@@ -67,8 +76,12 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setHeader("accessToken", access);
         response.setHeader("refreshToken", refresh);
 //        response.addCookie(createCookie("refresh", refresh));
-        response.setStatus(HttpStatus.OK.value());
 
+        response.setContentType("application/json;charset=UTF-8");
+        LoginResponse body = new LoginResponse(nickName);
+        objectMapper.writeValue(response.getWriter(), body);
+
+        response.setStatus(HttpStatus.OK.value());
         saveRefreshToken(username, refresh);
 
     }

@@ -62,8 +62,7 @@ public class SecurityConfig {
                                 configuration.setAllowCredentials(true);
                                 configuration.setAllowedHeaders(Collections.singletonList("*"));
                                 configuration.setMaxAge(3600L);
-
-                                configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                                configuration.setExposedHeaders(List.of("Authorization", "accessToken", "refreshToken"));
 
                                 return configuration;
                             }
@@ -77,7 +76,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/login","/","/api/member/exists","/api/member/register", "/api/trainer/register",
                                 "/swagger-ui/**", "/swagger-ui.html","/v3/api-docs/**",
-                                "/turn/**", "/signal/**").permitAll()
+                                "/turn/**", "/signal/**","/api/login").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/reissue").permitAll()
                         .anyRequest().authenticated()

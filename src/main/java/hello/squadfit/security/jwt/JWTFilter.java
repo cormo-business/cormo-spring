@@ -23,7 +23,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
 
     private static final String[] whitelist = {
-            "/login","/","/api/member/register", "/api/trainer/register",
+            "/api/login","/","/api/member/register", "/api/trainer/register",
             "/swagger-ui/**", "/swagger-ui.html","/v3/api-docs/**", "/api/member/exists",
             "/turn/credentials", "/signal/offer", "/signal/candidate"
     };

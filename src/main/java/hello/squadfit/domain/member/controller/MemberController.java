@@ -66,7 +66,7 @@ public class MemberController {
         Integer requiredExperience = member.getRequiredExperience();
         int size = member.getAttendances().size();
 
-        HomeInitResponse result = new HomeInitResponse(nickName, level, point, requiredExperience, size, "몰라");
+        HomeInitResponse result = new HomeInitResponse(nickName, level, point, requiredExperience, size, "몰라", userId);
         return ResponseEntity.ok(result);
     }
 
@@ -77,7 +77,8 @@ public class MemberController {
             int point,
             int levelProgress,
             int attendanceNum,
-            String profilePath
+            String profilePath,
+            Long userId
     ) {
     }
 

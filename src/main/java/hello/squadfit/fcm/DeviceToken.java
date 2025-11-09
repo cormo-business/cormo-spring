@@ -3,29 +3,35 @@ package hello.squadfit.fcm;// DeviceToken.java
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
-import java.time.Instant;
-import java.util.List;
+
 
 @Entity @Getter @Setter
+@Table(name = "device_tokens")
 public class DeviceToken {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId;
+    private Long userId;
 
-    @Column(length = 255, unique = true)
+    @Column(unique = true, nullable = false, length = 2048)
     private String token;
 
-//    private String platform;   // android / ios
-//    private String timezone;   // e.g., Asia/Seoul
+    private String platform = "android";
+
     private Boolean active = true;
 
-    private Instant lastSeenAt; // 앱이 마지막으로 Firebase 서버에 연결된 시점 -> 이게 오래되면 삭제 가능
+    private LocalDateTime lastSeenAt = LocalDateTime.now();
 
-    // 매일 특정 시각들(HH:mm)을 분 단위로 저장: 예) 09:00 -> 540
-    @ElementCollection
-    private List<Integer> minutesOfDay; // 0~1439
+    protected DeviceToken() {}
 
-    // getters/setters ...
+    public DeviceToken(Long userId, String token, String platform) {
+        this.userId = userId;
+        this.token = token;
+        this.platform = platform != null ? platform : "android";
+        this.active = true;
+        this.lastSeenAt = LocalDateTime.now();
+    }
+
 }

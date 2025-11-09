@@ -56,8 +56,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // FCM
-    implementation 'com.google.firebase:firebase-admin:9.3.0' // 최신 안정판 권장
-
+    implementation 'com.google.firebase:firebase-admin:9.4.1'
+    implementation 'com.google.api-client:google-api-client:2.6.0'
 }
 
 tasks.named('test') {

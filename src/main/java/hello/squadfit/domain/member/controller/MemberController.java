@@ -4,6 +4,7 @@ import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.entity.UserEntity;
 import hello.squadfit.domain.member.request.ChangeMemberRequest;
 import hello.squadfit.domain.member.request.CreateMemberRequest;
+import hello.squadfit.domain.member.service.AttendanceService;
 import hello.squadfit.domain.member.service.MemberService;
 import hello.squadfit.domain.member.service.UserService;
 import hello.squadfit.security.CustomUserDetails;
@@ -25,6 +26,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final UserService userService;
+    private final AttendanceService attendanceService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateMemberRequest request, BindingResult bindingResult, HttpServletResponse response){
@@ -66,7 +68,11 @@ public class MemberController {
         Integer requiredExperience = member.getRequiredExperience();
         int size = member.getAttendances().size();
 
-        HomeInitResponse result = new HomeInitResponse(nickName, level, point, requiredExperience, size, "몰라", userId);
+        Boolean checkAttendance = attendanceService.checkAttendance(member);
+
+        HomeInitResponse result = new HomeInitResponse(
+                nickName, level, point, requiredExperience, size, "몰라", userId, checkAttendance
+        );
         return ResponseEntity.ok(result);
     }
 
@@ -78,7 +84,8 @@ public class MemberController {
             int levelProgress,
             int attendanceNum,
             String profilePath,
-            Long userId
+            Long userId,
+            boolean checkAttendance
     ) {
     }
 

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 
+import static hello.squadfit.security.jwt.JWTExpiredMs.accessExpiredMs;
 import static hello.squadfit.security.jwt.JWTExpiredMs.refreshExpiredMs;
 
 @Slf4j
@@ -74,28 +75,29 @@ public class ReissueService {
         boolean isExist = jwtTokenRepository.matches(username, refresh);
 
         if (!isExist) {
-
             return ReissueResponse.builder()
                     .status(HttpStatus.BAD_REQUEST)
                     .message("DB invalid refresh token")
                     .build();
         }
         // 새 access, refresh 발급
-        String newAccess = jwtUtil.createJwt("access", username, role, 600000L, userId);
-        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L, userId);
+        String newAccess = jwtUtil.createJwt("access", username, role, accessExpiredMs, userId);
+//        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L, userId);
 
 
         // 응답 설정
         response.setHeader("accessToken", newAccess);
-        response.setHeader("refreshToken", newRefresh);
+        response.setHeader("refreshToken", refresh);
+//        response.setHeader("refreshToken", newRefresh);
         response.setStatus(HttpStatus.OK.value());
 
         // Refresh 토큰 저장 DB에 기존 토큰 삭제 후 새로운 토큰 저장하기
-        saveRefreshToken(username, newRefresh);
+//        saveRefreshToken(username, newRefresh);
 
         return ReissueResponse.builder()
                 .status(HttpStatus.OK)
                 .message("재발급 성공")
+                .accessToken(newAccess)
                 .build();
     }
 

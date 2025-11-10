@@ -19,7 +19,7 @@ public class NotifyScheduler {
     @Scheduled(cron = "0 30 11 * * *", zone = "Asia/Seoul")
     public void notifyAllAt1130() throws Exception {
         var tokens = repo.findAllByActiveTrue().stream().map(t -> t.getToken()).toList();
-        fcm.sendToTokens(tokens, "점심 알림", "11:30! 점심/일정 확인하세요.", null);
+        fcm.sendToTokens(tokens, "점심 알림", "11:30! 점심/일정 확인후 가볍게 운동하기.", null);
     }
 
     // 매일 17:30 (Asia/Seoul)

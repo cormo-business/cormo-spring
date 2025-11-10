@@ -25,7 +25,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private static final String[] whitelist = {
             "/api/login","/","/api/member/register", "/api/trainer/register",
             "/swagger-ui/**", "/swagger-ui.html","/v3/api-docs/**", "/api/member/exists",
-            "/turn/credentials", "/signal/offer", "/signal/candidate"
+            "/turn/credentials", "/signal/offer", "/signal/candidate","/api/reissue", "/api/fcm/**"
     };
 
     @Override
@@ -46,15 +46,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
 //        String token = accessToken.split(" ")[1];
 
-        // 토큰이 access인지 확인
-        String category = jwtUtil.getCategory(token);
-        if(!category.equals("access")){
-
-            response.getWriter().print("access 토큰 아님");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-            return;
-        }
 
         // 토큰 만료되었을 때
         try{
@@ -62,6 +53,16 @@ public class JWTFilter extends OncePerRequestFilter {
         }catch (ExpiredJwtException e){
 
             response.getWriter().print("access token 만료됨");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            return;
+        }
+
+        // 토큰이 access인지 확인
+        String category = jwtUtil.getCategory(token);
+        if(!category.equals("access")){
+
+            response.getWriter().print("access 토큰 아님");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
             return;

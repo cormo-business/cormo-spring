@@ -12,5 +12,6 @@ public class ReissueResponse {
 
     private HttpStatus status;
     private String message;
+    private String accessToken;
 
 }

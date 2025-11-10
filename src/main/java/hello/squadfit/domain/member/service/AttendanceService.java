@@ -31,13 +31,14 @@ public class AttendanceService {
             throw new RuntimeException("오늘 중복 출석입니다.");
         }
 
-        // 출석 하기 -> 변경 감지로 엔티티 저장 됨
+        // 출석 하기
         Attendance attendance = Attendance.create(member);
+        Attendance save = attendanceRepository.save(attendance);
 
         // 경험치 및 포인트 증가
         member.increaseAttendancePoint();
 
-        return attendance.getId();
+        return save.getId();
     }
 
     // 출석 조회하기

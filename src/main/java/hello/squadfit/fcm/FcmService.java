@@ -15,12 +15,25 @@ public class FcmService {
         this.repo = repo;
     }
 
+    private AndroidConfig androidHighWithChannel() {
+        return AndroidConfig.builder()
+                .setPriority(AndroidConfig.Priority.HIGH) // 우선순위 높이기
+                .setTtl(3600 * 1000)
+                .setNotification(AndroidNotification.builder()
+                        .setChannelId("default") // Android 채널 ID (앱에서 만든 것과 동일)
+                        .setSound("default") // 기본 사운드
+                        .setClickAction("OPEN_MAIN") // 클릭 시 인텐트 액션 매칭
+                        .build())
+                .build();
+    }
+
     /** 단건 전송 */
     public String sendToToken(String token, String title, String body, Map<String, String> data) throws Exception {
         Message msg = Message.builder()
                 .setToken(token)
                 .setNotification(Notification.builder().setTitle(title).setBody(body).build())
                 .putAllData(safeData(data))
+                .setAndroidConfig(androidHighWithChannel())
                 .build();
         return FirebaseMessaging.getInstance().send(msg);
     }
@@ -46,6 +59,7 @@ public class FcmService {
                     .setToken(token)
                     .setNotification(noti)
                     .putAllData(payload)
+                    .setAndroidConfig(androidHighWithChannel())
                     .build();
             try {
                 String id = FirebaseMessaging.getInstance().send(msg);
@@ -79,6 +93,7 @@ public class FcmService {
                 .setTopic(topic)
                 .setNotification(Notification.builder().setTitle(title).setBody(body).build())
                 .putAllData(safeData(data))
+                .setAndroidConfig(androidHighWithChannel())
                 .build();
         return FirebaseMessaging.getInstance().send(msg);
     }
@@ -89,6 +104,7 @@ public class FcmService {
                 .setCondition(condition)
                 .setNotification(Notification.builder().setTitle(title).setBody(body).build())
                 .putAllData(safeData(data))
+                .setAndroidConfig(androidHighWithChannel())
                 .build();
         return FirebaseMessaging.getInstance().send(msg);
     }

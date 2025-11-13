@@ -28,16 +28,20 @@ public class TestController {
     }
 
     @PostMapping("/api/test")
-    public Long test2(
+    public TestResponse test2(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody TestRequest request
             ){
         log.info("id = {}", userDetails.getUserId());
 
-        return userDetails.getUserId();
+        return new TestResponse(userDetails.getUserId());
     }
 
     record TestRequest(
       String nickname
+    ){}
+
+    record TestResponse(
+            Long memberId
     ){}
 }

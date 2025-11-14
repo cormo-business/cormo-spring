@@ -1,10 +1,12 @@
 package hello.squadfit.domain.member.controller;
 
+import hello.squadfit.domain.member.dto.HomeInitResponse;
 import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.entity.UserEntity;
 import hello.squadfit.domain.member.request.ChangeMemberRequest;
 import hello.squadfit.domain.member.request.CreateMemberRequest;
 import hello.squadfit.domain.member.service.AttendanceService;
+import hello.squadfit.domain.member.service.HomeInitService;
 import hello.squadfit.domain.member.service.MemberService;
 import hello.squadfit.domain.member.service.UserService;
 import hello.squadfit.security.CustomUserDetails;
@@ -27,6 +29,7 @@ public class MemberController {
     private final MemberService memberService;
     private final UserService userService;
     private final AttendanceService attendanceService;
+    private final HomeInitService homeInitService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateMemberRequest request, BindingResult bindingResult, HttpServletResponse response){
@@ -61,32 +64,33 @@ public class MemberController {
     @GetMapping("/init/info")
     public ResponseEntity<HomeInitResponse> homeInit(@AuthenticationPrincipal CustomUserDetails userDetails){
         Long userId = userDetails.getUserId();
-        Member member = memberService.findOneByUserId(userId);
-        String nickName = member.getNickName();
-        Integer level = member.getLevel();
-        Integer point = member.getPoint();
-        Integer requiredExperience = member.getRequiredExperience();
-        int size = member.getAttendances().size();
+//        Member member = memberService.findOneByUserId(userId);
+//        String nickName = member.getNickName();
+//        Integer level = member.getLevel();
+//        Integer point = member.getPoint();
+//        Integer requiredExperience = member.getRequiredExperience();
+//        int size = member.getAttendances().size();
+//
+//        Boolean checkAttendance = attendanceService.checkAttendance(member);
 
-        Boolean checkAttendance = attendanceService.checkAttendance(member);
-
-        HomeInitResponse result = new HomeInitResponse(
-                nickName, level, point, requiredExperience, size, "몰라", userId, checkAttendance
-        );
+//        HomeInitResponse result = new HomeInitResponse(
+//                nickName, level, point, requiredExperience, size, "몰라", userId, checkAttendance
+//        );
+        HomeInitResponse result = homeInitService.homeInit(userId);
         return ResponseEntity.ok(result);
     }
 
 
-    record HomeInitResponse(
-            String nickname,
-            int level,
-            int point,
-            int levelProgress,
-            int attendanceNum,
-            String profilePath,
-            Long userId,
-            boolean checkAttendance
-    ) {
-    }
+//    record HomeInitResponse(
+//            String nickname,
+//            int level,
+//            int point,
+//            int levelProgress,
+//            int attendanceNum,
+//            String profilePath,
+//            Long userId,
+//            boolean checkAttendance
+//    ) {
+//    }
 
 }

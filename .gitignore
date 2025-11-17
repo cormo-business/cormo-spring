@@ -35,6 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
-.env
+src/main/resources/.env
 /src/main/resources/application.yml
 /src/main/resources/secrets/firebase-sa.json
+/src/main/java/resources/application.yml

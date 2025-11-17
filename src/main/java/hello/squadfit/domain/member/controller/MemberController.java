@@ -1,11 +1,10 @@
 package hello.squadfit.domain.member.controller;
 
-import hello.squadfit.domain.member.dto.HomeInitResponse;
-import hello.squadfit.domain.member.entity.Member;
-import hello.squadfit.domain.member.entity.UserEntity;
+import hello.squadfit.domain.member.response.HomeInitResponse;
 import hello.squadfit.domain.member.request.ChangeMemberRequest;
 import hello.squadfit.domain.member.request.CreateMemberRequest;
 import hello.squadfit.domain.member.service.AttendanceService;
+//import hello.squadfit.domain.member.service.HomeInitService;
 import hello.squadfit.domain.member.service.HomeInitService;
 import hello.squadfit.domain.member.service.MemberService;
 import hello.squadfit.domain.member.service.UserService;
@@ -76,6 +75,7 @@ public class MemberController {
 //        HomeInitResponse result = new HomeInitResponse(
 //                nickName, level, point, requiredExperience, size, "몰라", userId, checkAttendance
 //        );
+//        HomeInitResponse result = homeInitService.homeInit(userId);
         HomeInitResponse result = homeInitService.homeInit(userId);
         return ResponseEntity.ok(result);
     }

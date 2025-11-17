@@ -17,13 +17,6 @@ public class HomeInitService {
         // Member 조회
         Member member = memberService.findOneByUserId(userId);
 
-        // 필요한 값 추출
-//        String nickName = member.getNickName();
-//        Integer level = member.getLevel();
-//        Integer point = member.getPoint();
-//        Integer requiredExperience = member.getRequiredExperience();
-//        int size = member.getAttendances().size();
-
         // 출석 여부
         Boolean checkAttendance = attendanceService.checkAttendance(member);
 

@@ -33,7 +33,6 @@
         private final UserRepository userRepository;
         private final JWTUtil jwtUtil;
         private final JWTTokenRepository jwtTokenRepository;
-//        private final AttendanceService attendanceService;
 
         @Transactional
         public Long join(CreateMemberRequest request, HttpServletResponse response){
@@ -96,21 +95,4 @@
             return memberRepository.findByUserEntity_Id(userId).orElseThrow(() -> new RuntimeException("유저 없는데유?"));
         }
 
-//        public HomeInitResponse homeInit(Long userId) {
-//            // Member 조회
-//            Member member = findOneByUserId(userId);
-//
-////            // 필요한 값 추출
-////            String nickName = member.getNickName();
-////            Integer level = member.getLevel();
-////            Integer point = member.getPoint();
-////            Integer requiredExperience = member.getRequiredExperience();
-////            int size = member.getAttendances().size();
-//
-//            // 출석 여부
-//            Boolean checkAttendance = attendanceService.checkAttendance(member);
-//
-//            // DTO 생성
-//            return HomeInitResponse.from(member, checkAttendance);
-//        }
     }

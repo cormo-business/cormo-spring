@@ -3,6 +3,8 @@ package hello.squadfit.domain.record.service;
 import hello.squadfit.domain.member.response.AllRecordResponse;
 import hello.squadfit.domain.member.response.SingleRecordResponse;
 import hello.squadfit.domain.member.response.mapper.SingleRecordResponseMapper;
+import hello.squadfit.domain.member.service.MemberService;
+import hello.squadfit.domain.record.controller.RecordController;
 import hello.squadfit.domain.record.dto.CreateRecordDto;
 import hello.squadfit.domain.record.entity.ExerciseType;
 import hello.squadfit.domain.record.entity.ExerciseRecord;
@@ -26,6 +28,37 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final MemberRepository memberRepository;
     private final ExerciseTypeRepository exerciseTypeRepository;
+    private final MemberService memberService;
+
+    // 기록 저장하기
+    @Transactional
+    public Long save(RecordController.SaveRequest request, Long userId) {
+
+        // 유효성 검사
+        Member member = memberService.findOneByUserId(userId);
+
+        ExerciseType exerciseType = exerciseTypeRepository.findByName(request.exerciseName())
+                .orElseThrow(() -> new IllegalStateException("종목 없는데?"));
+
+        // DTO 변경
+        CreateRecordDto createRecordDto = CreateRecordDto.builder()
+                .member(member)
+                .repeat(10)
+                .weight(0)
+                .successNumber(10)
+                .failNumber(0)
+                .exerciseType(exerciseType)
+                .build();
+
+        ExerciseRecord exerciseRecord = ExerciseRecord.createRecord(createRecordDto);
+
+        ExerciseRecord record = recordRepository.save(exerciseRecord);
+
+        // 포인트 증가
+        member.increaseExercisePoint();
+
+        return record.getId();
+    }
 
     // 기록 저장하기
     @Transactional
@@ -56,7 +89,6 @@ public class RecordService {
         member.increaseExercisePoint();
 
         return record.getId();
-
     }
 
     // 전체 기록 조회

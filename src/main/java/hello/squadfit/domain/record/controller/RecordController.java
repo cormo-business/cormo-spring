@@ -5,11 +5,13 @@ import hello.squadfit.domain.member.response.SingleRecordResponse;
 import hello.squadfit.domain.record.request.SaveRecordRequest;
 import hello.squadfit.domain.record.service.RecordService;
 import hello.squadfit.domain.member.service.MemberService;
+import hello.squadfit.security.CustomUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +25,24 @@ public class RecordController {
 
     private final RecordService recordService;
     private final MemberService memberService;
+
+    @PostMapping("/save")
+    public ResponseEntity<?> saveRecord(
+            @RequestBody SaveRequest request,
+            @AuthenticationPrincipal CustomUserDetails userDetails
+            ){
+
+        Long saveId = recordService.save(request, userDetails.getUserId());
+
+        return ResponseEntity.ok(new saveResponse(saveId));
+    }
+
+    public record SaveRequest(
+            String exerciseName
+    ){}
+    public record saveResponse(
+            Long recordId
+    ){}
 
     @Operation(summary = "운동 기록 저장")
     @PostMapping

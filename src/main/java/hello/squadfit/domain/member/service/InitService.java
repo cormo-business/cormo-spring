@@ -1,6 +1,6 @@
 package hello.squadfit.domain.member.service;
 
-import hello.squadfit.domain.member.dto.TodayAttendanceCheckDto;
+import hello.squadfit.domain.member.dto.TodayCheckDto;
 import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.response.HomeInitResponse;
 import hello.squadfit.domain.record.service.RecordService;
@@ -38,16 +38,17 @@ public class InitService {
         
         // 이번주 출석 관련 정보들
         WeekDto thisWeekRange = getThisWeekRange();
-        List<TodayAttendanceCheckDto> weekAttendance = attendanceService.getWeekAttendance(member, thisWeekRange.start, thisWeekRange.end);
+        List<TodayCheckDto> weekAttendance = attendanceService.getWeekAttendance(member, thisWeekRange.start, thisWeekRange.end);
 
         // 이번주 운동 횟수
+        List<TodayCheckDto> weekRecords = recordService.getWeekRecord(member,thisWeekRange.start, thisWeekRange.end);
 
         // 오늘 운동 몇번했는지
         int todayRecordNum = recordService.getCountTodayRecord(member);
 
         return new HomeInitResponse(
                 nickName, level, point, requiredExperience, size, "몰라",
-                userId, checkAttendance, continuousAttendance, weekAttendance, todayRecordNum
+                userId, checkAttendance, continuousAttendance, weekAttendance, todayRecordNum, weekRecords
         );
     }
 

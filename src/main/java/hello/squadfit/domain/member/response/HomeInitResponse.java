@@ -1,6 +1,6 @@
 package hello.squadfit.domain.member.response;
 
-import hello.squadfit.domain.member.dto.TodayAttendanceCheckDto;
+import hello.squadfit.domain.member.dto.TodayCheckDto;
 
 import java.util.List;
 
@@ -14,8 +14,10 @@ public record HomeInitResponse(
         Long userId,
         boolean checkAttendance,
         int continuousAttendance,
-        List<TodayAttendanceCheckDto> weekAttendance,
-        int todayRecordNum
+        List<TodayCheckDto> weekAttendance,
+        int todayRecordNum,
+        List<TodayCheckDto> weekRecords
+
 ) {
 
 }

@@ -1,6 +1,6 @@
 package hello.squadfit.domain.member.service;
 
-import hello.squadfit.domain.member.dto.TodayAttendanceCheckDto;
+import hello.squadfit.domain.member.dto.TodayCheckDto;
 import hello.squadfit.domain.member.entity.Attendance;
 import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.repository.AttendanceRepository;
@@ -69,9 +69,9 @@ public class AttendanceService {
     }
 
     // 일정 기간 동안의 출석 여부
-    public List<TodayAttendanceCheckDto> getWeekAttendance(Member member, LocalDate start, LocalDate end) {
+    public List<TodayCheckDto> getWeekAttendance(Member member, LocalDate start, LocalDate end) {
 
-        List<TodayAttendanceCheckDto> result = new ArrayList<>();
+        List<TodayCheckDto> result = new ArrayList<>();
 
         // start ~ end 까지 하루씩 증가
         for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
@@ -86,7 +86,7 @@ public class AttendanceService {
             String dayOfWeekKorean = date.getDayOfWeek()
                     .getDisplayName(TextStyle.SHORT, Locale.KOREAN); // 예: "월", "화"
 
-            result.add(new TodayAttendanceCheckDto(
+            result.add(new TodayCheckDto(
                     dayOfWeekKorean,
                     date.getDayOfMonth(),
                     checked

@@ -3,6 +3,7 @@ package hello.squadfit.domain.member.service;
 import hello.squadfit.domain.member.dto.TodayAttendanceCheckDto;
 import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.response.HomeInitResponse;
+import hello.squadfit.domain.record.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +20,7 @@ public class InitService {
 
     private final MemberService memberService;
     private final AttendanceService attendanceService;
+    private final RecordService recordService;
 
     public HomeInitResponse initHome(Long userId){
 
@@ -29,16 +31,23 @@ public class InitService {
         Integer requiredExperience = member.getRequiredExperience();
         int size = member.getAttendances().size();
 
+        // 출석 여부
         Boolean checkAttendance = attendanceService.checkAttendance(member);
+        // 연속 출석 수 -> 필요없을지도
         int continuousAttendance = attendanceService.getContinuousAttendance(member);
-
+        
+        // 이번주 출석 관련 정보들
         WeekDto thisWeekRange = getThisWeekRange();
         List<TodayAttendanceCheckDto> weekAttendance = attendanceService.getWeekAttendance(member, thisWeekRange.start, thisWeekRange.end);
 
+        // 이번주 운동 횟수
+
+        // 오늘 운동 몇번했는지
+        int todayRecordNum = recordService.getCountTodayRecord(member);
 
         return new HomeInitResponse(
                 nickName, level, point, requiredExperience, size, "몰라",
-                userId, checkAttendance, continuousAttendance, weekAttendance
+                userId, checkAttendance, continuousAttendance, weekAttendance, todayRecordNum
         );
     }
 

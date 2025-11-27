@@ -14,7 +14,8 @@ public record HomeInitResponse(
         Long userId,
         boolean checkAttendance,
         int continuousAttendance,
-        List<TodayAttendanceCheckDto> weekAttendance
+        List<TodayAttendanceCheckDto> weekAttendance,
+        int todayRecordNum
 ) {
 
 }

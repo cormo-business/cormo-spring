@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +126,14 @@ public class RecordService {
 
     public ExerciseRecord findOne(Long memberId, Long recordId) {
         return recordRepository.findByMemberIdAndId(memberId, recordId).orElseThrow(() -> new RuntimeException("기록이 없는데요?"));
+    }
+
+    public int getCountTodayRecord(Member member) {
+        LocalDate today = LocalDate.now();
+        LocalDateTime start = today.atStartOfDay();
+        LocalDateTime end = today.plusDays(1).atStartOfDay();
+        long result = recordRepository.countTodayRecord(member, start, end);
+        
+        return (int) result;
     }
 }

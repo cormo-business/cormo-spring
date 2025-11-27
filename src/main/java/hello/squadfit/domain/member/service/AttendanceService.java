@@ -1,5 +1,6 @@
 package hello.squadfit.domain.member.service;
 
+import hello.squadfit.domain.member.dto.TodayAttendanceCheckDto;
 import hello.squadfit.domain.member.entity.Attendance;
 import hello.squadfit.domain.member.entity.Member;
 import hello.squadfit.domain.member.repository.AttendanceRepository;
@@ -12,6 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 @Service
 @Transactional(readOnly = true)
@@ -61,4 +67,55 @@ public class AttendanceService {
                 attendance -> attendance.getAttendanceTime().toLocalDate().isEqual(LocalDate.now()));
 
     }
+
+    // 일정 기간 동안의 출석 여부
+    public List<TodayAttendanceCheckDto> getWeekAttendance(Member member, LocalDate start, LocalDate end) {
+
+        List<TodayAttendanceCheckDto> result = new ArrayList<>();
+
+        // start ~ end 까지 하루씩 증가
+        for (LocalDate date = start; !date.isAfter(end); date = date.plusDays(1)) {
+
+            LocalDateTime dayStart = date.atStartOfDay(); // 00:00:00
+            LocalDateTime dayEnd = date.plusDays(1).atStartOfDay(); // 다음날 00:00:00 (미만 조건처럼 사용)
+
+            boolean checked = attendanceRepository
+                    .existsByMemberAndAttendanceTimeBetween(member, dayStart, dayEnd);
+
+            // 요일 한글(월, 화, 수...)로 가져오기
+            String dayOfWeekKorean = date.getDayOfWeek()
+                    .getDisplayName(TextStyle.SHORT, Locale.KOREAN); // 예: "월", "화"
+
+            result.add(new TodayAttendanceCheckDto(
+                    dayOfWeekKorean,
+                    date.getDayOfMonth(),
+                    checked
+            ));
+        }
+
+        return result;
+    }
+
+    public int getContinuousAttendance(Member member) {
+        LocalDate today = LocalDate.now();
+        int count = 0;
+
+        while (true) {
+            LocalDateTime dayStart = today.atStartOfDay();
+            LocalDateTime dayEnd = today.plusDays(1).atStartOfDay();
+
+            boolean attended = attendanceRepository
+                    .existsByMemberAndAttendanceTimeBetween(member, dayStart, dayEnd);
+
+            if (attended) {
+                count++;
+                today = today.minusDays(1); // 하루 뒤로
+            } else {
+                break;
+            }
+        }
+
+        return count;
+    }
+
 }

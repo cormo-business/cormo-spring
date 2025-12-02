@@ -25,7 +25,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private static final String[] whitelist = {
             "/api/login","/","/api/member/register", "/api/trainer/register",
             "/swagger-ui/**", "/swagger-ui.html","/v3/api-docs/**", "/api/member/exists",
-            "/turn/credentials", "/signal/offer", "/signal/candidate","/api/reissue", "/api/fcm/**"
+            "/turn/credentials", "/signal/offer", "/signal/candidate","/api/reissue", "/api/fcm/**", "/api/email/**"
     };
 
     @Override

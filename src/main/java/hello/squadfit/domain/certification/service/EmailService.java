@@ -1,9 +1,10 @@
-package hello.squadfit.domain.member.service;
+package hello.squadfit.domain.certification.service;
 
 import hello.squadfit.config.EmailConfig;
-import hello.squadfit.domain.member.repository.EmailRepository;
-import hello.squadfit.domain.member.request.CheckedEmailRequest;
-import hello.squadfit.domain.member.request.SendEmailRequest;
+import hello.squadfit.domain.certification.repository.EmailRepository;
+import hello.squadfit.domain.certification.request.CheckedEmailRequest;
+import hello.squadfit.domain.certification.request.SendEmailRequest;
+import hello.squadfit.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

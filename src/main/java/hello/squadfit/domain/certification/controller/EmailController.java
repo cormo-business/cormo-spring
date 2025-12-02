@@ -1,10 +1,11 @@
-package hello.squadfit.domain.member.controller;
+package hello.squadfit.domain.certification.controller;
 
-import hello.squadfit.domain.member.request.CheckedEmailRequest;
-import hello.squadfit.domain.member.request.SendEmailRequest;
-import hello.squadfit.domain.member.service.EmailService;
+import hello.squadfit.domain.certification.request.CheckedEmailRequest;
+import hello.squadfit.domain.certification.request.SendEmailRequest;
+import hello.squadfit.domain.certification.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,9 @@ public class EmailController {
 
         Boolean result = emailService.sendEmail(request);
 
-        return ResponseEntity.ok(result);
+        if (!result) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 
+        return ResponseEntity.ok(true);
     }
 
     // 메일 확인하기
@@ -34,7 +36,8 @@ public class EmailController {
 
         Boolean result = emailService.checkedEmail(request);
 
-        return ResponseEntity.ok(result);
+        if (!result) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
 
+        return ResponseEntity.ok(true);
     }
 }

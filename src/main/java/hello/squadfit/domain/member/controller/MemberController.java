@@ -1,14 +1,9 @@
 package hello.squadfit.domain.member.controller;
 
-import hello.squadfit.domain.member.entity.Member;
-import hello.squadfit.domain.member.entity.UserEntity;
 import hello.squadfit.domain.member.request.ChangeMemberRequest;
 import hello.squadfit.domain.member.request.CreateMemberRequest;
 import hello.squadfit.domain.member.response.HomeInitResponse;
-import hello.squadfit.domain.member.service.AttendanceService;
-import hello.squadfit.domain.member.service.InitService;
-import hello.squadfit.domain.member.service.MemberService;
-import hello.squadfit.domain.member.service.UserService;
+import hello.squadfit.domain.member.service.*;
 import hello.squadfit.security.CustomUserDetails;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -30,6 +25,7 @@ public class MemberController {
     private final UserService userService;
     private final AttendanceService attendanceService;
     private final InitService initService;
+    private final EmailService emailService;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody CreateMemberRequest request, BindingResult bindingResult, HttpServletResponse response){
@@ -68,6 +64,5 @@ public class MemberController {
 
         return ResponseEntity.ok(result);
     }
-
 
 }

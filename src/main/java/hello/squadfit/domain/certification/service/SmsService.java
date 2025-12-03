@@ -58,7 +58,7 @@ public class SmsService {
 
 
         // 4) Redis에 저장, 검증 시 꺼내서 비교
-        smsRepository.save(phoneNumber, phoneNumber, Duration.ofMinutes(10));
+        smsRepository.save(phoneNumber, code, Duration.ofMinutes(10));
 
     }
 
@@ -147,11 +147,11 @@ public class SmsService {
 
 
     /**
-     * 6자리 인증번호 생성
+     * 4자리 인증번호 생성
      */
     private String createRandomCode() {
         Random random = new Random();
-        int code = random.nextInt(900000) + 100000; // 100000 ~ 999999
+        int code = random.nextInt(9000) + 1000; // 1000 ~ 9999
         return String.valueOf(code);
     }
 

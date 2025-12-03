@@ -17,10 +17,19 @@ public class FirebaseConfig {
     @PostConstruct
     public void init() throws Exception {
         if (FirebaseApp.getApps().isEmpty()) {
-            Dotenv dotenv = Dotenv.load();
-            String b64 = dotenv.get("FIREBASE_SA_B64");
+
+            String b64 = System.getenv("FIREBASE_SA_B64");
+
             if (b64 == null || b64.isBlank()) {
-                throw new IllegalStateException("❌ FIREBASE_SA_B64 환경변수가 설정되지 않았습니다!");
+                // .env 있으면 쓰고, 없으면 에러 내지 말고 그냥 지나감
+                Dotenv dotenv = Dotenv.configure()
+                        .ignoreIfMissing()   // ★ 핵심: .env 없어도 예외 안 던지게
+                        .load();
+                b64 = dotenv.get("FIREBASE_SA_B64");
+            }
+
+            if (b64 == null || b64.isBlank()) {
+                throw new IllegalStateException("❌ FIREBASE_SA_B64가 환경변수/ .env 둘 다에 없습니다.");
             }
 
             byte[] decoded = Base64.getDecoder().decode(b64);

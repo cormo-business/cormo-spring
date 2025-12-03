@@ -18,7 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SmsController {
 
     private final SmsService smsService;
-
+    
+    // SMS 보내기
     @PostMapping("/send")
     public ResponseEntity<Void> send(@RequestBody @Valid SmsSendRequest request) {
         smsService.sendVerificationCode(request.getPhoneNumber());

@@ -10,9 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -58,7 +60,7 @@ public class SmsService {
 
 
         // 4) Redis에 저장, 검증 시 꺼내서 비교
-        smsRepository.save(phoneNumber, phoneNumber, Duration.ofMinutes(10));
+        smsRepository.save(phoneNumber, code, Duration.ofMinutes(10));
 
     }
 
@@ -90,8 +92,20 @@ public class SmsService {
                 .header("x-ncp-apigw-signature-v2", signature)
                 .bodyValue(requestDto)
                 .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, res ->
+                        res.bodyToMono(String.class).flatMap(body -> {
+                            log.error("SENS 4xx ERROR: status={}, body={}", res.statusCode(), body);
+                            return Mono.error(new RuntimeException("SENS 4xx: " + body));
+                        })
+                )
+                .onStatus(HttpStatusCode::is5xxServerError, res ->
+                        res.bodyToMono(String.class).flatMap(body -> {
+                            log.error("SENS 5xx ERROR: status={}, body={}", res.statusCode(), body);
+                            return Mono.error(new RuntimeException("SENS 5xx: " + body));
+                        })
+                )
                 .bodyToMono(SmsResponseDto.class)
-                .block(); // 인증은 대부분 동기로 처리해도 무방
+                .block();
     }
 
     /**

@@ -3,6 +3,7 @@ package hello.squadfit.fcm.config;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,7 +17,8 @@ public class FirebaseConfig {
     @PostConstruct
     public void init() throws Exception {
         if (FirebaseApp.getApps().isEmpty()) {
-            String b64 = System.getenv("FIREBASE_SA_B64");
+            Dotenv dotenv = Dotenv.load();
+            String b64 = dotenv.get("FIREBASE_SA_B64");
             if (b64 == null || b64.isBlank()) {
                 throw new IllegalStateException("❌ FIREBASE_SA_B64 환경변수가 설정되지 않았습니다!");
             }

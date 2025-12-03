@@ -16,6 +16,7 @@ public interface RecordRepository extends JpaRepository<ExerciseRecord, Long> {
 
     Optional<ExerciseRecord> findByMemberIdAndId(Long memberId, Long recordID);
 
+    // 오늘 운동 몇번 했는지 확인
     @Query("""
         select count(er)
         from ExerciseRecord er
@@ -27,4 +28,7 @@ public interface RecordRepository extends JpaRepository<ExerciseRecord, Long> {
             @Param("start") LocalDateTime start,
             @Param("end") LocalDateTime end
     );
+
+    // 해당 날짜에 기록이 존재하는지 확인
+    boolean existsByMemberAndRecordDateBetween(Member member, LocalDateTime dayStart, LocalDateTime dayEnd);
 }

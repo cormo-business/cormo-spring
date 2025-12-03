@@ -1,5 +1,6 @@
 package hello.squadfit.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -37,6 +38,7 @@ public class WebClientConfig {
 
     // 네이버 SENS 전용 WebClient
     @Bean
+    @Qualifier("sensWebClient")
     public WebClient sensWebClient() {
 
         return WebClient.builder()

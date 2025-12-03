@@ -1,6 +1,6 @@
 package hello.squadfit.domain.member.dto;
 
-public record TodayAttendanceCheckDto(
+public record TodayCheckDto(
         String dayOfWeek,
         int day,
         Boolean check

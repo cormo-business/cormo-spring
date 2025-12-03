@@ -1,5 +1,6 @@
 package hello.squadfit.domain.member.controller;
 
+import hello.squadfit.domain.certification.service.EmailService;
 import hello.squadfit.domain.member.request.ChangeMemberRequest;
 import hello.squadfit.domain.member.request.CreateMemberRequest;
 import hello.squadfit.domain.member.response.HomeInitResponse;

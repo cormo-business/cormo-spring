@@ -1,4 +1,4 @@
-package hello.squadfit.domain.member.request;
+package hello.squadfit.domain.certification.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

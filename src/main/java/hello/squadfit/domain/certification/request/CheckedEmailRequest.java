@@ -1,4 +1,4 @@
-package hello.squadfit.domain.member.request;
+package hello.squadfit.domain.certification.request;
 
 public record CheckedEmailRequest(
         String email,

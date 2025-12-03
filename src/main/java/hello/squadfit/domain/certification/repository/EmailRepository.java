@@ -1,4 +1,4 @@
-package hello.squadfit.domain.member.repository;
+package hello.squadfit.domain.certification.repository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

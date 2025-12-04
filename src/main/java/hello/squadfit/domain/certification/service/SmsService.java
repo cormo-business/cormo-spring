@@ -58,12 +58,27 @@ public class SmsService {
         SmsResponseDto smsResponseDto = sendSms(phoneNumber, content);
         log.info("smsResponseDto requestId = {}", smsResponseDto.requestId());
 
-
         // 4) Redis에 저장, 검증 시 꺼내서 비교
         smsRepository.save(phoneNumber, code, Duration.ofMinutes(10));
 
     }
 
+    /**
+     * 인증번호 검증
+     */
+    public Boolean verifyCode(SmsVerifyRequest request) {
+
+        String savedCode = smsRepository.find(request.getPhoneNumber());
+
+        boolean isMatch = savedCode.equals(request.getCode());
+
+        if(isMatch){
+            // 한번 인증 후 삭제하기
+            smsRepository.delete(request.getPhoneNumber());
+
+        }
+        return isMatch;
+    }
 
     /**
      * 실제 SMS API 호출
@@ -142,22 +157,6 @@ public class SmsService {
         }
     }
 
-    /**
-     * 인증번호 검증
-     */
-    public Boolean verifyCode(SmsVerifyRequest request) {
-
-        String savedCode = smsRepository.find(request.getPhoneNumber());
-
-        boolean isMatch = savedCode.equals(request.getCode());
-
-        if(isMatch){
-            // 한번 인증 후 삭제하기
-            smsRepository.delete(request.getPhoneNumber());
-
-        }
-        return isMatch;
-    }
 
 
     /**
